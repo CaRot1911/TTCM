@@ -30,12 +30,6 @@ CREATE TABLE `Guests`(
     FOREIGN KEY (g_addId) REFERENCES Address(addId) ON DELETE SET NULL
 );
 
-DROP TABLE IF EXISTS StarRate;
-CREATE TABLE StarRate(
-    srId    INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    srImage NVARCHAR(100)
-);
-
 DROP TABLE IF EXISTS `Hotel`;
 CREATE TABLE `Hotel`(
     hId             INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -45,9 +39,15 @@ CREATE TABLE `Hotel`(
     hDescription    NVARCHAR(100)   NOT NULL ,
     hRoomCount      INT             NOT NULL ,
     h_addId         INT ,
-    h_srId          INT ,
-    FOREIGN KEY (h_addId) REFERENCES Address(addId) ON DELETE SET NULL ,
-    FOREIGN KEY (h_srId) REFERENCES StarRate(srId) ON DELETE SET NULL
+    FOREIGN KEY (h_addId) REFERENCES Address(addId) ON DELETE SET NULL
+);
+
+DROP TABLE IF EXISTS StarRate;
+CREATE TABLE StarRate(
+    srId    INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    srImage NVARCHAR(100) ,
+    sr_hId  INT NOT NULL ,
+    FOREIGN KEY (sr_hId) REFERENCES Hotel(hId) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS HotelImage;
