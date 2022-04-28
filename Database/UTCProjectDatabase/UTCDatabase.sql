@@ -5,121 +5,122 @@ USE UTCDemo;
 
 DROP TABLE IF EXISTS Address;
 CREATE TABLE Address(
-    addId       INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    addCountry  NVARCHAR(100) ,
-    addCity NVARCHAR(100)       NOT NULL
+    add_id          INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    add_country     NVARCHAR(100)   NOT NULL ,
+    add_city        NVARCHAR(100)   NOT NULL
 );
 
 DROP TABLE IF EXISTS UserType;
 CREATE TABLE UserType(
-    utId    INT                     NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    utName  ENUM('GUESTS','ADMIN')  NOT NULL DEFAULT 'GUESTS'
+    ut_id    INT                     NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    ut_name  ENUM('GUESTS','ADMIN')  NOT NULL DEFAULT 'GUESTS'
 );
 
 DROP TABLE IF EXISTS Guests;
 CREATE TABLE `Guests`(
-    gId         INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    gFirstName  NVARCHAR(100)   NOT NULL ,
-    gLastName   NVARCHAR(100)   NOT NULL ,
-    gIdCard     NVARCHAR(100)   NOT NULL UNIQUE ,
-    gCreditCard NVARCHAR(100)   NOT NULL UNIQUE ,
-    gEmail      NVARCHAR(100)   NOT NULL UNIQUE ,
-    g_utId      INT             NOT NULL ,
-    g_addId     INT ,
-    FOREIGN KEY (g_utId) REFERENCES UserType(utId) ,
-    FOREIGN KEY (g_addId) REFERENCES Address(addId) ON DELETE SET NULL
+    g_id            INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    g_first_name    NVARCHAR(100)   NOT NULL ,
+    g_last_name     NVARCHAR(100)   NOT NULL ,
+    g_idCard        NVARCHAR(100)   NOT NULL UNIQUE ,
+    g_credit_card   NVARCHAR(100)            UNIQUE ,
+    g_email         NVARCHAR(100)   NOT NULL UNIQUE ,
+    g_ut_id         INT             NOT NULL DEFAULT 2,
+    g_add_id        INT             NOT NULL,
+    FOREIGN KEY (g_ut_id) REFERENCES UserType(ut_id) ,
+    FOREIGN KEY (g_add_id) REFERENCES Address(add_id)
 );
 
 DROP TABLE IF EXISTS `Hotel`;
 CREATE TABLE `Hotel`(
-    hId             INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    hName           NVARCHAR(100)   NOT NULL UNIQUE ,
-    hEmailAddress   NVARCHAR(100)   NOT NULL UNIQUE ,
-    hWebsite        NVARCHAR(100)   NOT NULL UNIQUE ,
-    hDescription    NVARCHAR(100)   NOT NULL ,
-    hRoomCount      INT             NOT NULL ,
+    h_id             INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    h_name           NVARCHAR(100)   NOT NULL UNIQUE ,
+    h_email_address   NVARCHAR(100)   NOT NULL UNIQUE ,
+    h_website        NVARCHAR(100)   NOT NULL UNIQUE ,
+    h_description    NVARCHAR(100)   NOT NULL ,
+    h_roomCount      INT             NOT NULL ,
     h_addId         INT ,
-    FOREIGN KEY (h_addId) REFERENCES Address(addId) ON DELETE SET NULL
+    FOREIGN KEY (h_addId) REFERENCES Address(add_id) ON DELETE SET NULL
 );
 
 DROP TABLE IF EXISTS StarRate;
 CREATE TABLE StarRate(
-    srId    INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    srImage NVARCHAR(100) ,
-    sr_hId  INT NOT NULL ,
-    FOREIGN KEY (sr_hId) REFERENCES Hotel(hId) ON DELETE CASCADE
+    sr_id       INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    sr_image    NVARCHAR(100) ,
+    sr_hId      INT NOT NULL ,
+    FOREIGN KEY (sr_hId) REFERENCES Hotel(h_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS HotelImage;
 CREATE TABLE HotelImage(
-    hiImageName NVARCHAR(100)   NOT NULL PRIMARY KEY ,
-    hi_hId      INT             NOT NULL ,
-    FOREIGN KEY (hi_hId) REFERENCES Hotel(hId)
+    hi_id           INT             NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    hi_image_name   NVARCHAR(100)   NOT NULL ,
+    hi_hId          INT             NOT NULL ,
+    FOREIGN KEY (hi_hId) REFERENCES Hotel(h_id)
 );
 
 DROP TABLE IF EXISTS RoomType;
 CREATE TABLE RoomType(
-    rtId            INT                                         NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    rtName          NVARCHAR(100)                               NOT NULL ,
-    rtCost          DECIMAL(10,2)                               NOT NULL ,
-    rtDescription   ENUM('TRAVEL','GO ON BUSSINESS','RESORT')   NOT NULL DEFAULT 'TRAVEL'
+    rt_id            INT                                         NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    rt_name          NVARCHAR(100)                               NOT NULL ,
+    rt_cost          DECIMAL(10,2)                               NOT NULL ,
+    rt_description   ENUM('TRAVEL','GO ON BUSSINESS','RESORT')   NOT NULL DEFAULT 'TRAVEL'
 );
 
 DROP TABLE IF EXISTS RoomRateDiscount;
 CREATE TABLE RoomRateDiscount(
-  rrdId         INT             NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-  rrdRate       DECIMAL(10,2)   NOT NULL ,
-  rrdStartMonth DATETIME        NOT NULL ,
-  rrdEndMonth   DATETIME        NOT NULL ,
-  rrd_rtId      INT ,
-  FOREIGN KEY (rrd_rtId) REFERENCES RoomType(rtId) ON DELETE SET NULL
+  rrd_id            INT             NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+  rrd_rate          DECIMAL(10,2)   NOT NULL ,
+  rrd_startMonth    DATETIME        NOT NULL ,
+  rrd_endMonth      DATETIME        NOT NULL ,
+  rrd_rtId          INT ,
+  FOREIGN KEY (rrd_rtId) REFERENCES RoomType(rt_id) ON DELETE SET NULL
 );
 
 DROP TABLE IF EXISTS Room;
 CREATE TABLE Room(
-    rId         INT                     NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    rNumber     INT                     NOT NULL ,
-    rStatus     ENUM ('DRUM','BOOKING') NOT NULL DEFAULT 'DRUM' ,
-    r_rtId      INT ,
-    r_hId       INT ,
-    FOREIGN KEY (r_rtId) REFERENCES RoomType(rtId) ON DELETE SET NULL ,
-    FOREIGN KEY (r_hId) REFERENCES Hotel(hId) ON DELETE SET NULL
+    r_id            INT                     NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    r_number        INT                     NOT NULL ,
+    r_status        ENUM ('DRUM','BOOKING') NOT NULL DEFAULT 'DRUM' ,
+    r_rtId          INT ,
+    r_hId           INT ,
+    FOREIGN KEY (r_rtId) REFERENCES RoomType(rt_id) ON DELETE SET NULL ,
+    FOREIGN KEY (r_hId) REFERENCES Hotel(h_id) ON DELETE SET NULL
 );
 
 DROP TABLE IF EXISTS Booking;
 CREATE TABLE Booking(
-    bId             INT                     NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    bDate           DATETIME                NOT NULL DEFAULT NOW() ,
-    bDurationOfStay INT ,
-    bCheckInDate    DATETIME                NOT NULL ,
-    bCheckOutDate   DATETIME                NOT NULL ,
-    bTypePayment    ENUM('BAKING','DIRECT') NOT NULL DEFAULT 'DIRECT' ,
-    bTotalRoom      TINYINT                 NOT NULL DEFAULT 1 ,
-    b_hId           INT                     NOT NULL ,
-    b_gId           INT                     NOT NULL ,
-    bTotalAmount    DECIMAL(10,2) ,
-    bStatus         ENUM('UNPAID','PAID')   NOT NULL DEFAULT 'UNPAID' ,
-    FOREIGN KEY (b_hId) REFERENCES Hotel(hId) ,
-    FOREIGN KEY (b_gId) REFERENCES Guests(gId)
+    b_id                INT                     NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    b_date              DATETIME                NOT NULL DEFAULT NOW() ,
+    b_durationOfStay    INT ,
+    b_checkInDate       DATETIME                NOT NULL ,
+    b_checkOutDate      DATETIME                NOT NULL ,
+    b_typePayment       ENUM('BAKING','DIRECT') NOT NULL DEFAULT 'DIRECT' ,
+    b_totalRoom         TINYINT                 NOT NULL DEFAULT 1 ,
+    b_hId               INT                     NOT NULL ,
+    b_gId               INT                     NOT NULL ,
+    b_totalAmount       DECIMAL(10,2) ,
+    b_status            ENUM('UNPAID','PAID')   NOT NULL DEFAULT 'UNPAID' ,
+    FOREIGN KEY (b_hId) REFERENCES Hotel(h_id) ,
+    FOREIGN KEY (b_gId) REFERENCES Guests(g_Id)
 
 );
 
 DROP TABLE IF EXISTS RoomBook;
 CREATE TABLE RoomBook(
-    rbId        INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    rb_rId      INT NOT NULL ,
-    rb_bId      INT NOT NULL ,
-    FOREIGN KEY (rb_rId) REFERENCES Room(rId) ON DELETE CASCADE ,
-    FOREIGN KEY (rb_bId) REFERENCES Booking(bId) ON DELETE CASCADE
+    rb_id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    rb_rId          INT NOT NULL ,
+    rb_bId          INT NOT NULL ,
+    FOREIGN KEY (rb_rId) REFERENCES Room(r_id) ON DELETE CASCADE ,
+    FOREIGN KEY (rb_bId) REFERENCES Booking(b_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS HotelServices;
 CREATE TABLE HotelServices(
-    hsId        INT             NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    hsName      NVARCHAR(100)   NOT NULL ,
-    hsCost      DECIMAL(10,2)   NOT NULL ,
-    hs_hId      INT             NOT NULL ,
-    FOREIGN KEY (hs_hId) REFERENCES Hotel(hId) ON DELETE CASCADE
+    hs_id           INT             NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    hs_name         NVARCHAR(100)   NOT NULL ,
+    hs_cost         DECIMAL(10,2)   NOT NULL ,
+    hs_hId          INT             NOT NULL ,
+    FOREIGN KEY (hs_hId) REFERENCES Hotel(h_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS UserServices;
@@ -127,8 +128,8 @@ CREATE TABLE UserServices (
     us_hsId     INT NOT NULL ,
     us_bId      INT NOT NULL ,
     PRIMARY KEY (us_hsId,us_bId) ,
-    FOREIGN KEY (us_bId) REFERENCES Booking(bId) ON DELETE CASCADE ,
-    FOREIGN KEY (us_hsId) REFERENCES HotelServices(hsId) ON DELETE CASCADE
+    FOREIGN KEY (us_bId) REFERENCES Booking(b_id) ON DELETE CASCADE ,
+    FOREIGN KEY (us_hsId) REFERENCES HotelServices(hs_id) ON DELETE CASCADE
 );
 
 
