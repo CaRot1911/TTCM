@@ -21,6 +21,8 @@ public interface IRoomService {
 
     public Page<Room> getListRoomByType(String roomType,Pageable pageable);
 
+    public Page<Room> getListRoomByStatusRoomAndHotelName(String status,String hotelName,Pageable pageable);
+
     public void createRoom(RoomCreateForm form);
 
     public void updateRoom(int id, RoomUpdateFrom from);

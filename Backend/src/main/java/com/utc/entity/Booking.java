@@ -43,6 +43,7 @@ public class Booking implements Serializable {
     private Date checkOut;
 
     @Column(name = "`b_typePayment`",nullable = false,columnDefinition = "DEFAULT 'DIRECT'")
+    @Enumerated(EnumType.STRING)
     private PaymentType type;
 
     @Column(name = "`b_totalRoom`",nullable = false,columnDefinition = "DEFAULT 1")
@@ -57,7 +58,7 @@ public class Booking implements Serializable {
     private Guests guests;
 
     @Column(name = "b_totalAmount")
-    private float amount;
+    private double amount;
 
     @Column(name = "b_status",nullable = false,columnDefinition = "DEFAULT 'UNPAID'")
     @Enumerated(EnumType.STRING)

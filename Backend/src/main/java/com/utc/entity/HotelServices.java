@@ -26,7 +26,7 @@ public class HotelServices implements Serializable {
     private String name;
 
     @Column(name = "`hs_cost`",nullable = false)
-    private float cost;
+    private double cost;
 
     @ManyToOne
     @JoinColumn(name = "`hs_hId`",referencedColumnName = "`h_id`")

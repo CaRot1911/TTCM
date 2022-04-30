@@ -3,11 +3,11 @@ package com.utc.form.create;
 import lombok.Data;
 
 @Data
-public class RoomCreateForm {
+public class HotelServiceCreateForm {
 
-    private String number;
+    private String name;
 
-    private int roomType;
+    private Double cost;
 
     private String hotelName;
 }

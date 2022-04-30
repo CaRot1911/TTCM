@@ -23,11 +23,13 @@ public class UserServices implements Serializable {
     private UserServiceKey key;
 
     @ManyToOne
-    @JoinColumn(name = "`b_id`")
+    @JoinColumn(name = "us_bId")
+    @MapsId("us_bId")
     private Booking booking;
 
 
     @ManyToOne
-    @JoinColumn(name = "`hs_id`")
+    @JoinColumn(name = "us_hsId")
+    @MapsId("us_hsId")
     private HotelServices hotelServices;
 }
