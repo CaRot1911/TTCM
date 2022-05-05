@@ -45,7 +45,7 @@ CREATE TABLE `Hotel`(
 DROP TABLE IF EXISTS StarRate;
 CREATE TABLE StarRate(
     sr_id       INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    sr_image    NVARCHAR(100) ,
+    sr_image    INT ,
     sr_hId      INT NOT NULL ,
     FOREIGN KEY (sr_hId) REFERENCES Hotel(h_id) ON DELETE CASCADE
 );

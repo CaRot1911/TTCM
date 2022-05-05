@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class StarRateUpdateForm {
 
-    private String ImageName;
+    private int ImageName;
 }

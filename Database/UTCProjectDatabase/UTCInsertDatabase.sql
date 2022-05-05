@@ -25,10 +25,10 @@ VALUES (N'LuxuryHotel',           N'hotel@gmail.com',     N'lxury.vn',        N'
        (N'Hải Đăng',              N'haidang@gmail.com',   N'haidang.vn',      N'Có vị trí đắc địa nhìn ra biển Hạ Long ...',  24,6);
 
 INSERT INTO `starrate`(sr_image, sr_hId)
-VALUES ('image',1),
-       ('image',1),
-       ('image',2),
-       ('image',3);
+VALUES (1,1),
+       (1,1),
+       (2,2),
+       (5,3);
 
 INSERT INTO `hotelimage`(hi_image_name, hi_hId)
 VALUES ('1',1),
@@ -64,3 +64,8 @@ VALUES (N'Hoàng Phong',   230000.00,1),
 INSERT INTO `userservices`
 VALUES (1,1),
        (2,2);
+       
+
+select * from utcdemo.room
+join utcdemo.hotel on utcdemo.room.r_hId = utcdemo.hotel.h_id
+join utcdemo.roomtype on utcdemo.room.r_rtId = utcdemo.roomtype.rt_id

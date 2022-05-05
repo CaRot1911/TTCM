@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class StarRateCreateForm {
 
-    public String nameImage;
+    public int nameImage;
 
     private int hotelId;
 }

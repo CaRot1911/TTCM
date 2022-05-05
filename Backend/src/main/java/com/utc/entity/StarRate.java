@@ -24,7 +24,7 @@ public class StarRate implements Serializable {
     private int id;
 
     @Column(name = "sr_image",length = 100)
-    private String image;
+    private int image;
 
     @ManyToOne
     @JoinColumn(name = "sr_hId",referencedColumnName = "h_id")

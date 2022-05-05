@@ -9,5 +9,5 @@ public class StarRateDTO {
 
     private String hotelName;
 
-    private String image;
+    private int image;
 }
