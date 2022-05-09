@@ -10,23 +10,19 @@ CREATE TABLE Address(
     add_city        NVARCHAR(100)   NOT NULL
 );
 
-DROP TABLE IF EXISTS UserType;
-CREATE TABLE UserType(
-    ut_id    INT                     NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    ut_name  ENUM('GUESTS','ADMIN')  NOT NULL DEFAULT 'GUESTS'
-);
-
 DROP TABLE IF EXISTS Guests;
 CREATE TABLE `Guests`(
     g_id            INT             NOT NULL PRIMARY KEY AUTO_INCREMENT,
     g_first_name    NVARCHAR(100)   NOT NULL ,
     g_last_name     NVARCHAR(100)   NOT NULL ,
+    g_user_name     VARCHAR(100)    NOT NULL ,
     g_idCard        NVARCHAR(100)   NOT NULL UNIQUE ,
     g_credit_card   NVARCHAR(100)            UNIQUE ,
     g_email         NVARCHAR(100)   NOT NULL UNIQUE ,
+    g_password      NVARCHAR(200)   NOT NULL ,
     g_ut_id         INT             NOT NULL DEFAULT 2,
+    g_type          ENUM('GUESTS','ADMIN') NOT NULL DEFAULT 'GUESTS',
     g_add_id        INT             NOT NULL,
-    FOREIGN KEY (g_ut_id) REFERENCES UserType(ut_id) ,
     FOREIGN KEY (g_add_id) REFERENCES Address(add_id)
 );
 
@@ -45,7 +41,7 @@ CREATE TABLE `Hotel`(
 DROP TABLE IF EXISTS StarRate;
 CREATE TABLE StarRate(
     sr_id       INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    sr_image    INT ,
+    sr_image    NVARCHAR(100) ,
     sr_hId      INT NOT NULL ,
     FOREIGN KEY (sr_hId) REFERENCES Hotel(h_id) ON DELETE CASCADE
 );

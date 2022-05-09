@@ -83,4 +83,9 @@ public class AddressService implements IAddressService{
     public void deleteAllAddress(List<Integer> ids) {
         addressRepository.deleteAllAddress(ids);
     }
+
+    @Override
+    public Address getAddressByCityAndAndCountry(String city, String country) {
+        return addressRepository.getAddressByCityAndAndCountry(city,country);
+    }
 }

@@ -1,9 +1,7 @@
 package com.utc.configuration;
 
-import org.hibernate.mapping.Collection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -19,7 +17,7 @@ import java.util.Collections;
 public class SwaggerConfiguration {
 
     @Bean
-    public Docket api(){
+    public Docket UTCApi(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select().apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())

@@ -14,4 +14,8 @@ public interface IGuestsRepository extends JpaRepository<Guests,Integer>, JpaSpe
 
     @Query(value = "SELECT guests FROM Guests guests")
     public List<Guests> getAll();
+
+    public Guests findGuestsByUserName(String userName);
+
+    public Guests getGuestsByUserName(String userName);
 }

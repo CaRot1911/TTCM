@@ -10,14 +10,9 @@ VALUES (N'Sapa',               N'Lào Cai'),
        (N'Bán Đảo Sơn Trà',    N'Đà Nẵng'),
        (N'Bãi biển Mỹ Khê',    N'Đà Nẵng');
 
-
-INSERT INTO `usertype`(ut_Name)
-VALUES ('ADMIN'),
-       ('GUESTS');
-
-INSERT INTO `guests`(g_first_name, g_last_name, g_idCard, g_credit_card, g_email, g_ut_id, g_add_id)
-VALUES (N'Hoàng',N'Việt','000012','0321654',N'hoangviet@gmail.com',   2,1),
-       (N'Thanh',N'Ngân','02335', '3535323',N'thanhngan@gmail.com',   1,2);
+INSERT INTO `guests`(g_first_name, g_last_name, g_idCard, g_credit_card, g_email,g_type,g_password, g_add_id,g_user_name)
+VALUES (N'Hoàng',N'Việt','000012','0321654',N'hoangviet@gmail.com','GUESTS','$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi',1,'hoangviet'),
+       (N'Thanh',N'Ngân','02335', '3535323',N'thanhngan@gmail.com','GUESTS','$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi',2,'thanhngan');
 
 INSERT INTO `hotel`(h_name, h_email_address, h_website, h_description, h_roomCount, h_addId)
 VALUES (N'LuxuryHotel',           N'hotel@gmail.com',     N'lxury.vn',        N'Luxury là một trong những khách sạn ...',     12,1),
@@ -25,10 +20,10 @@ VALUES (N'LuxuryHotel',           N'hotel@gmail.com',     N'lxury.vn',        N'
        (N'Hải Đăng',              N'haidang@gmail.com',   N'haidang.vn',      N'Có vị trí đắc địa nhìn ra biển Hạ Long ...',  24,6);
 
 INSERT INTO `starrate`(sr_image, sr_hId)
-VALUES (1,1),
-       (1,1),
-       (2,2),
-       (5,3);
+VALUES ('image',1),
+       ('image',1),
+       ('image',2),
+       ('image',3);
 
 INSERT INTO `hotelimage`(hi_image_name, hi_hId)
 VALUES ('1',1),
@@ -64,8 +59,3 @@ VALUES (N'Hoàng Phong',   230000.00,1),
 INSERT INTO `userservices`
 VALUES (1,1),
        (2,2);
-       
-
-select * from utcdemo.room
-join utcdemo.hotel on utcdemo.room.r_hId = utcdemo.hotel.h_id
-join utcdemo.roomtype on utcdemo.room.r_rtId = utcdemo.roomtype.rt_id

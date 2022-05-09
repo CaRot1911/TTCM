@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -66,6 +70,11 @@ public class GuestsService implements IGuestsService{
     }
 
     @Override
+    public void createGuestsByGuests(Guests guests) {
+        guestsRepository.save(guests);
+    }
+
+    @Override
     public void updateGuests(int id, GuestsUpdateForm form) {
         Guests guests = guestsRepository.findById(id).get();
         guests.setEmail(form.getEmail());
@@ -77,5 +86,22 @@ public class GuestsService implements IGuestsService{
     public void deleteGuests(int id) {
         Guests guests = guestsRepository.findById(id).get();
         guestsRepository.delete(guests);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Guests guests = guestsRepository.getGuestsByUserName(userName);
+        if (guests == null){
+            throw new UsernameNotFoundException(userName);
+        }
+        if (guests.getGuestsType() != null){
+            return new User(guests.getUserName()
+                    ,guests.getPassword()
+                    , AuthorityUtils.createAuthorityList(guests.getGuestsType().toString()));
+        }else {
+            return new User(guests.getUserName()
+                    ,guests.getPassword()
+                    , AuthorityUtils.createAuthorityList("GUESTS"));
+        }
     }
 }

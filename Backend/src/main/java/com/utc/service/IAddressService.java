@@ -30,4 +30,7 @@ public interface IAddressService {
     public void deleteAddress(int id);
 
     public void deleteAllAddress(List<Integer> ids);
+
+    public Address getAddressByCityAndAndCountry(String city, String country);
+
 }

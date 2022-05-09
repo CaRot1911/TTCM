@@ -10,12 +10,16 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/UTCDemo/image")
+@Validated
 public class HotelImageController {
 
     @Autowired
@@ -25,6 +29,7 @@ public class HotelImageController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> getListImageByHotelName(@RequestParam(name = "hotelName") String hotelName){
         List<HotelImage> list = hotelImageService.getAllListImageByName(hotelName);
         List<HotelImageDTO> dtoList = modelMapper.map(list,new TypeToken<List<HotelImageDTO>>(){}.getType());
@@ -32,18 +37,21 @@ public class HotelImageController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createHotelImage(@RequestBody HotelImageCreateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> createHotelImage(@RequestBody @Valid HotelImageCreateForm form){
         hotelImageService.createHotelImage(form);
         return new ResponseEntity<>("Create Image Hotel Success!!",HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateHotelImage(@RequestParam(name = "id") int id,@RequestBody HotelImageUpdateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> updateHotelImage(@RequestParam(name = "id") int id,@RequestBody @Valid HotelImageUpdateForm form){
         hotelImageService.updateHotelImage(id, form);
         return new ResponseEntity<>("Update Image Hotel Success!!",HttpStatus.OK);
     }
 
     @DeleteMapping
+    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> deleteHotelImageByHotelId(@RequestParam(name = "id") int id){
         hotelImageService.deleteHotelImageByHotelId(id);
         return new ResponseEntity<>("Delete Image Hotel Success!!",HttpStatus.OK);

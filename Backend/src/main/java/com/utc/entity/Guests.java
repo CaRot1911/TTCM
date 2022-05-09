@@ -30,6 +30,9 @@ public class Guests implements Serializable {
     @Column(name = "g_last_name",nullable = false,length = 100)
     private String lastName;
 
+    @Column(name = "g_user_name",nullable = false,length = 100)
+    private String userName;
+
     @Column(name = "g_idCard",nullable = false,length = 100,unique = true)
     private String idCard;
 
@@ -39,13 +42,16 @@ public class Guests implements Serializable {
     @Column(name = "g_email",nullable = false,length = 100,unique = true)
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "g_ut_id",referencedColumnName = "ut_id",nullable = false)
-    @ColumnDefault("INT NOT NULL DEFAULT 2")
-    private UserType type;
+    @Column(name = "g_password",length = 200,nullable = false)
+    private String password;
+
+    @Column(name = "g_type",nullable = false)
+    @ColumnDefault("ENUM('GUESTS','ADMIN') DEFAULT 'GUESTS'")
+    @Enumerated(EnumType.STRING)
+    private GuestsType guestsType;
 
     @ManyToOne
-    @JoinColumn(name = "g_add_id",referencedColumnName = "add_id",nullable = false)
+    @JoinColumn(name = "g_add_id",referencedColumnName = "add_id")
     private Address address;
 
     @Formula("concat(g_first_name,' ',g_last_name)")
@@ -54,5 +60,15 @@ public class Guests implements Serializable {
     @OneToMany(mappedBy = "guests")
     private List<Booking> bookings;
 
-
+    public enum GuestsType{
+        GUESTS,ADMIN;
+        public static GuestsType toEnum(String strClient){
+            for (GuestsType item : GuestsType.values()){
+                if (item.toString().equalsIgnoreCase(strClient)){
+                    return item;
+                }
+            }
+            return null;
+        }
+    }
 }

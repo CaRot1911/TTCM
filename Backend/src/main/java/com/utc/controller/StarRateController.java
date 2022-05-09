@@ -13,12 +13,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/UTCDemo/starRate")
+@Validated
 public class StarRateController {
 
     @Autowired
@@ -28,6 +32,7 @@ public class StarRateController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> getListStarRateByHotelName(@RequestParam(name = "search") String search){
         List<StarRate> starRateList = starRateService.getListStarRateByHotelName(search);
         List<StarRateDTO> dtoList = modelMapper.map(starRateList,new TypeToken<List<StarRateDTO>>(){}.getType());
@@ -35,6 +40,7 @@ public class StarRateController {
     }
 
     @GetMapping("/page")
+    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> getPageStarRateByHotelName(@RequestParam(name = "search") String search, Pageable pageable){
         Page<StarRate> starRatePage = starRateService.getPageStarRateByHotelName(search, pageable);
         List<StarRateDTO> starRateDTOS = modelMapper.map(starRatePage.getContent(),new TypeToken<List<StarRateDTO>>(){}.getType());
@@ -44,18 +50,21 @@ public class StarRateController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createStarRate(@RequestBody StarRateCreateForm form){
+    @PreAuthorize(value = "GUESTS")
+    public ResponseEntity<?> createStarRate(@RequestBody @Valid StarRateCreateForm form){
         starRateService.createStarRate(form);
         return new ResponseEntity<>("Create Success!!",HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateStarRate(@RequestParam(name = "id") int id, StarRateUpdateForm form){
+    @PreAuthorize(value = "GUESTS")
+    public ResponseEntity<?> updateStarRate(@RequestParam(name = "id") int id, @Valid StarRateUpdateForm form){
         starRateService.updateStarRate(id, form);
         return new ResponseEntity<>("Update Success!!!",HttpStatus.OK);
     }
 
     @DeleteMapping
+    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> deleteMultipleImage(@RequestBody List<Integer> ids){
         starRateService.deleteMultipleImage(ids);
         return new ResponseEntity<>("Delete Multiple Star Rate Success!!!",HttpStatus.OK);

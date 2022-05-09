@@ -14,12 +14,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("UTCDemo/hotel")
+@Validated
 public class HotelController {
 
 
@@ -30,6 +34,7 @@ public class HotelController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getAllListHotels(){
         List<Hotel> list = hotelService.findAllHotel();
         List<HotelDTO> hotelDTOS = modelMapper.map(list,new TypeToken<List<HotelDTO>>(){}.getType());
@@ -38,6 +43,7 @@ public class HotelController {
     }
 
     @GetMapping("/getByCity")
+    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getHotelByCity(Pageable pageable, @RequestParam(name = "city") String city){
         Page<Hotel> page = hotelService.findAllHotelByCity(city, pageable);
         List<HotelDTO> hotelDTOList = modelMapper.map(page.getContent(),new TypeToken<List<HotelDTO>>(){}.getType());
@@ -47,6 +53,7 @@ public class HotelController {
     }
 
     @GetMapping("/page")
+    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> findAllByPage(@RequestParam(name = "search",required = false) String search,Pageable pageable, HotelFilterForm form){
         Page<Hotel> pageHotel = hotelService.findAllHotelByPage(search, pageable, form);
         List<HotelDTO> hotelDTOList = modelMapper.map(pageHotel.getContent(),new TypeToken<List<HotelDTO>>(){}.getType());
@@ -56,13 +63,15 @@ public class HotelController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createHotel(@RequestBody HotelCreateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> createHotel(@RequestBody @Valid HotelCreateForm form){
         hotelService.createHotel(form);
         return new ResponseEntity<>("Create Hotel Success!!!",HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateHotel(@RequestParam(name = "id") int id,@RequestBody HotelUpdateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> updateHotel(@RequestParam(name = "id") int id,@RequestBody @Valid HotelUpdateForm form){
         boolean checkExits = hotelService.HotelExitsById(id);
         if (!checkExits){
             hotelService.updateHotel(id,form);

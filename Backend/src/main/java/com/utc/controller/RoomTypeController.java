@@ -14,12 +14,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/UTCDemo/roomType")
+@Validated
 public class RoomTypeController {
 
     @Autowired
@@ -29,6 +33,7 @@ public class RoomTypeController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> getListRoomType(){
         List<RoomType> list = roomTypeService.getListRoomType();
         List<RoomTypeDTO> dtoList = modelMapper.map(list,new TypeToken<List<RoomTypeDTO>>(){}.getType());
@@ -37,6 +42,7 @@ public class RoomTypeController {
     }
 
     @GetMapping("/page")
+    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> getListRoomTypeByPage(String search, RoomTypeFilter filter, Pageable pageable){
         Page<RoomType> page = roomTypeService.getAllByPage(search,filter,pageable);
         List<RoomTypeDTO> roomTypeDTOS = modelMapper.map(page.getContent(),new TypeToken<List<RoomTypeDTO>>(){}.getType());
@@ -46,18 +52,21 @@ public class RoomTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createRoomType(@RequestBody RoomTypeCreateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> createRoomType(@RequestBody @Valid RoomTypeCreateForm form){
         roomTypeService.createRoomType(form);
         return new ResponseEntity<>("Create Success!!",HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateRoomType(@RequestParam(name = "id") int id,@RequestBody RoomTypeUpdateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> updateRoomType(@RequestParam(name = "id") int id,@RequestBody @Valid RoomTypeUpdateForm form){
         roomTypeService.updateRoomType(id,form);
         return new ResponseEntity<>("Update Success!!",HttpStatus.OK);
     }
 
     @DeleteMapping
+    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> deleteRoomType(@RequestParam(value = "id") int id){
         roomTypeService.deleteRoomType(id);
         return new ResponseEntity<>("Delete Success !!",HttpStatus.OK);

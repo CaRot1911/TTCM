@@ -29,6 +29,7 @@ public interface IAddressRepository extends JpaRepository<Address,Integer> , Jpa
 
     public boolean existsAddressByCountry(String country);
 
+    @Query("select a from Address a where a.city = ?1 and a.country = ?2")
     public Address getAddressByCityAndAndCountry(String city, String country);
 
     public Address findAddressByCityAndCountry(String city,String country);

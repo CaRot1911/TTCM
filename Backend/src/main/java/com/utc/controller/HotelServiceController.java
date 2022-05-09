@@ -15,12 +15,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/UTCDemo/hotelServices")
+@Validated
 public class HotelServiceController {
 
     @Autowired
@@ -30,6 +34,7 @@ public class HotelServiceController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @PreAuthorize(value = "permitAll()")
     private ResponseEntity<?> getListHotelServiceByHotelName(@RequestParam(name = "search",required = false) String search, HotelServiceFilter filter, Pageable pageable){
         Page<HotelServices> hotelServicesPage = hotelServiceService.getListHotelServiceByHotelName(search, filter, pageable);
         List<HotelServicesDTO> hotelServicesDTOS = modelMapper.map(hotelServicesPage.getContent(),new TypeToken<List<HotelServicesDTO>>(){}.getType());
@@ -39,18 +44,21 @@ public class HotelServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createHotelService(@RequestBody HotelServiceCreateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> createHotelService(@RequestBody @Valid HotelServiceCreateForm form){
         hotelServiceService.createHotelService(form);
         return new ResponseEntity<>("Create Hotel Service Success!!!",HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateHotelService(@RequestParam(name = "name") String name,@RequestParam(name = "hotelName") String hotelName,@RequestBody HotelServiceUpdateForm form){
+    @PreAuthorize(value = "ADMIN")
+    public ResponseEntity<?> updateHotelService(@RequestParam(name = "name") String name,@RequestParam(name = "hotelName") String hotelName,@RequestBody @Valid HotelServiceUpdateForm form){
         hotelServiceService.updateHotelService(name, hotelName, form);
         return new ResponseEntity<>("Update Hotel Service Success!!!",HttpStatus.OK);
     }
 
     @DeleteMapping
+    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> deleteHotelService(@RequestParam(name = "hotelName") String hotelName){
         hotelServiceService.deleteHotelService(hotelName);
         return new ResponseEntity<>("Delete Hotel Service Success By Name!!!",HttpStatus.OK);

@@ -14,13 +14,17 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/UTCDemo/address")
+@Validated
 public class AddressController {
 
     @Autowired
@@ -30,6 +34,7 @@ public class AddressController {
     private ModelMapper modelMapper;
 
     @GetMapping()
+//    @PreAuthorize("permitAll()")
     public ResponseEntity<?> listAddress(){
         List<Address> addressList = addressService.findAllAddress();
         List<AddressDTO> addressDTOS = modelMapper.map(addressList,new TypeToken<List<AddressDTO>>(){}.getType());
@@ -37,6 +42,7 @@ public class AddressController {
     }
 
     @GetMapping("/page")
+//    @PreAuthorize("permitAll()")
     public ResponseEntity<?> listAddressByPaging(@RequestParam(required = false,name = "search") Integer search, Pageable pageable, AddressFilter filter){
         Page<Address> page = addressService.findAllAddressByPage(search,pageable,filter);
         List<AddressDTO> dtos = modelMapper.map(page.getContent(),new TypeToken<List<AddressDTO>>(){}.getType());
@@ -46,27 +52,31 @@ public class AddressController {
     }
 
     @PostMapping("/createAddress")
-    public ResponseEntity<?> createAddress(@RequestBody AddressInsertForm form){
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> createAddress(@RequestBody @Valid AddressInsertForm form){
         addressService.createAddress(form);
 
         return new ResponseEntity<>("Create success!!",HttpStatus.OK);
     }
 
     @PutMapping("/updateAddress")
-    public ResponseEntity<?> updateAddress(@RequestParam(name = "id") int id,@RequestBody AddressUpdateForm form){
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> updateAddress(@RequestParam(name = "id") int id,@RequestBody @Valid AddressUpdateForm form){
         addressService.updateAddress(id, form);
 
         return new ResponseEntity<>("Update Success!!!",HttpStatus.OK);
     }
 
     @DeleteMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteAddress(@RequestParam(name = "id") int id){
         addressService.deleteAddress(id);
         return new ResponseEntity<>("Delete Success!!!",HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteAllAddress")
-    public ResponseEntity<?> deleteAllAddress(@RequestBody List<Integer> ids){
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> deleteAllAddress(@RequestParam List<Integer> ids){
         addressService.deleteAllAddress(ids);
         return new ResponseEntity<>("Delete All Address Success!!!",HttpStatus.OK);
     }

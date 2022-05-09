@@ -25,7 +25,7 @@ public class Address implements Serializable {
     @Column(name = "`add_id`")
     private int id;
 
-    @Column(name = "`add_country`",length = 100)
+    @Column(name = "`add_country`",length = 100,nullable = false)
     private String country;
 
     @Column(name = "`add_city`",length = 100,nullable = false)
