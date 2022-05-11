@@ -11,9 +11,13 @@ public interface IBookingService {
 
     public Page<Booking> getListBookingByPage(String search, BookingFilter filter, Pageable pageable);
 
+    public  Page<Booking> getListBookingByIdCard(String idCard,Pageable pageable);
+
     public void updateBooking(String idCard, BookingUpdateForm form);
 
-    public void createBooking(BookingCreateForm form);
+    public void createBooking(String idCard,BookingCreateForm form);
+
+    public void deleteBookingById(int id);
 
     public void deleteAllByStatus(String status);
 }

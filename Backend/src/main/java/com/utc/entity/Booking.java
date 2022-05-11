@@ -29,7 +29,7 @@ public class Booking implements Serializable {
     @Column(name = "`b_date`",nullable = false,columnDefinition = "DEFAULT NOW()")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    private Date date;
+    private Date dateBooking;
 
     @Column(name = "`b_durationOfStay`")
     private int timeLive;

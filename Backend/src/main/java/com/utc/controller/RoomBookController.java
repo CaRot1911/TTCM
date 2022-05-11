@@ -30,7 +30,6 @@ public class RoomBookController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> getListRoomBook(){
         List<RoomBook> roomBookList = roomBookService.getListRoomBook();
         List<RoomBookDTO> roomBookDTOList = modelMapper.map(roomBookList,new TypeToken<List<RoomBookDTO>>(){}.getType());
@@ -39,7 +38,6 @@ public class RoomBookController {
     }
 
     @GetMapping("/guestsId")
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> getRoomBookByBookingGuestsId(@RequestParam(name = "guestsId") int guestsId){
         List<RoomBook> roomBookList = roomBookService.getRoomBookByBookingGuestsId(guestsId);
         List<RoomBookDTO> roomBookDTOList = modelMapper.map(roomBookList,new TypeToken<List<RoomBookDTO>>(){}.getType());
@@ -48,7 +46,6 @@ public class RoomBookController {
     }
 
     @PostMapping
-    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> createRoomBooking(@RequestBody @Valid RoomBookCreateForm form){
         roomBookService.createRoomBook(form);
 //        Thay doi status cua room
@@ -56,14 +53,12 @@ public class RoomBookController {
     }
 
     @PutMapping
-    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> updateRoomBooking(@RequestParam(name = "id")int id,@RequestBody @Valid RoomBookUpdateForm form){
         roomBookService.updateRoomBook(id,form);
         return new ResponseEntity<>("Update Success!!!", HttpStatus.OK);
     }
 
     @DeleteMapping
-    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> deleteRoomBooking(@RequestParam(name = "id") int id){
         roomBookService.deleteRoomBook(id);
 //        Thay doi trang thai cua room;

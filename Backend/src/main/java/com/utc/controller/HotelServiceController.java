@@ -34,7 +34,6 @@ public class HotelServiceController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    @PreAuthorize(value = "permitAll()")
     private ResponseEntity<?> getListHotelServiceByHotelName(@RequestParam(name = "search",required = false) String search, HotelServiceFilter filter, Pageable pageable){
         Page<HotelServices> hotelServicesPage = hotelServiceService.getListHotelServiceByHotelName(search, filter, pageable);
         List<HotelServicesDTO> hotelServicesDTOS = modelMapper.map(hotelServicesPage.getContent(),new TypeToken<List<HotelServicesDTO>>(){}.getType());
@@ -44,21 +43,18 @@ public class HotelServiceController {
     }
 
     @PostMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> createHotelService(@RequestBody @Valid HotelServiceCreateForm form){
         hotelServiceService.createHotelService(form);
         return new ResponseEntity<>("Create Hotel Service Success!!!",HttpStatus.OK);
     }
 
     @PutMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> updateHotelService(@RequestParam(name = "name") String name,@RequestParam(name = "hotelName") String hotelName,@RequestBody @Valid HotelServiceUpdateForm form){
         hotelServiceService.updateHotelService(name, hotelName, form);
         return new ResponseEntity<>("Update Hotel Service Success!!!",HttpStatus.OK);
     }
 
     @DeleteMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> deleteHotelService(@RequestParam(name = "hotelName") String hotelName){
         hotelServiceService.deleteHotelService(hotelName);
         return new ResponseEntity<>("Delete Hotel Service Success By Name!!!",HttpStatus.OK);

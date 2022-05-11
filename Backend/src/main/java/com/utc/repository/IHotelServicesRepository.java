@@ -12,4 +12,5 @@ public interface IHotelServicesRepository extends JpaRepository<HotelServices,In
     public HotelServices getHotelServicesByHotelName(String name);
 
     public HotelServices getHotelServicesByName(String hotelServicesName);
+
 }

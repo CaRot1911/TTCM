@@ -29,7 +29,6 @@ public class HotelImageController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> getListImageByHotelName(@RequestParam(name = "hotelName") String hotelName){
         List<HotelImage> list = hotelImageService.getAllListImageByName(hotelName);
         List<HotelImageDTO> dtoList = modelMapper.map(list,new TypeToken<List<HotelImageDTO>>(){}.getType());
@@ -37,21 +36,18 @@ public class HotelImageController {
     }
 
     @PostMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> createHotelImage(@RequestBody @Valid HotelImageCreateForm form){
         hotelImageService.createHotelImage(form);
         return new ResponseEntity<>("Create Image Hotel Success!!",HttpStatus.OK);
     }
 
     @PutMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> updateHotelImage(@RequestParam(name = "id") int id,@RequestBody @Valid HotelImageUpdateForm form){
         hotelImageService.updateHotelImage(id, form);
         return new ResponseEntity<>("Update Image Hotel Success!!",HttpStatus.OK);
     }
 
     @DeleteMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> deleteHotelImageByHotelId(@RequestParam(name = "id") int id){
         hotelImageService.deleteHotelImageByHotelId(id);
         return new ResponseEntity<>("Delete Image Hotel Success!!",HttpStatus.OK);

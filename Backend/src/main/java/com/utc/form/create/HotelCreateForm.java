@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Getter
@@ -37,7 +38,7 @@ public class HotelCreateForm {
     @Length(max = 100,message = "Length exceeds 100 characters")
     private String city;
 
-    @NotBlank(message = "Can't be left empty")
+    @NotNull(message = "Can't be left empty")
     @PositiveOrZero(message = "The room count must be greater than or equal 0")
     private int roomCount;
 }

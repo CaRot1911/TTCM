@@ -25,4 +25,6 @@ public interface IGuestsService extends UserDetailsService {
 
     public void deleteGuests(int id);
 
+    public Guests getGuestsByIdCard(String idCard);
+
 }

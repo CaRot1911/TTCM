@@ -33,7 +33,6 @@ public class RoomController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getListRoom(){
         List<Room> list = roomService.getListRoom();
         List<RoomDTO> roomDTOS = modelMapper.map(list,new TypeToken<List<RoomDTO>>(){}.getType());
@@ -42,7 +41,6 @@ public class RoomController {
     }
 
     @GetMapping("/page")
-    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getListRoomByPage(@RequestParam(name = "search",required = false) String search, RoomFilter filter, Pageable pageable){
         Page<Room> list = roomService.getListRoomByPage(search, filter, pageable);
         List<RoomDTO> roomDTOS = modelMapper.map(list.getContent(),new TypeToken<List<RoomDTO>>(){}.getType());
@@ -51,7 +49,6 @@ public class RoomController {
     }
 
     @GetMapping("/pageStatus")
-    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getListRoomByStatus(@RequestParam(name = "status") String status,Pageable pageable){
         Page<Room> list = roomService.getListRoomByStatus(status, pageable);
         List<RoomDTO> roomDTOS = modelMapper.map(list.getContent(),new TypeToken<List<RoomDTO>>(){}.getType());
@@ -60,7 +57,6 @@ public class RoomController {
     }
 
     @GetMapping("/pageHotelName")
-    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getListRoomByHotelName(@RequestParam(name = "hotelName") String hotelName,Pageable pageable){
         Page<Room> list = roomService.getListRoomByHotelName(hotelName, pageable);
         List<RoomDTO> roomDTOS = modelMapper.map(list.getContent(),new TypeToken<List<RoomDTO>>(){}.getType());
@@ -69,7 +65,6 @@ public class RoomController {
     }
 
     @GetMapping("/pageRoomType")
-    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getListRoomByType(@RequestParam(name = "roomType") String roomType,Pageable pageable){
         Page<Room> list = roomService.getListRoomByType(roomType, pageable);
         List<RoomDTO> roomDTOS = modelMapper.map(list.getContent(),new TypeToken<List<RoomDTO>>(){}.getType());
@@ -78,7 +73,6 @@ public class RoomController {
     }
 
     @GetMapping("/pageRoomTypeAndHotelName")
-    @PreAuthorize(value = "GUESTS")
     public ResponseEntity<?> getListRoomByStatusRoomAndHotelName(@RequestParam(name = "status") String status,@RequestParam(name = "hotelName") String hotelName,Pageable pageable){
         Page<Room> list = roomService.getListRoomByStatusRoomAndHotelName(status, hotelName, pageable);
         List<RoomDTO> roomDTOS = modelMapper.map(list.getContent(),new TypeToken<List<RoomDTO>>(){}.getType());
@@ -87,21 +81,18 @@ public class RoomController {
     }
 
     @PostMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> createRoom(@RequestBody @Valid RoomCreateForm form){
         roomService.createRoom(form);
         return new ResponseEntity<>("Create Success!!",HttpStatus.OK);
     }
 
     @PutMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> updateRoom(@RequestParam(name = "id") int id,@RequestBody @Valid RoomUpdateFrom form){
         roomService.updateRoom(id,form);
         return new ResponseEntity<>("Create Success!!",HttpStatus.OK);
     }
 
     @DeleteMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> deleteRoom(@RequestParam(name = "id") int id){
         roomService.deleteRoom(id);
         return new ResponseEntity<>("Delete Success!!",HttpStatus.OK);

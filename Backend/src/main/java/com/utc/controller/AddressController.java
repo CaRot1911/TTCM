@@ -34,7 +34,6 @@ public class AddressController {
     private ModelMapper modelMapper;
 
     @GetMapping()
-//    @PreAuthorize("permitAll()")
     public ResponseEntity<?> listAddress(){
         List<Address> addressList = addressService.findAllAddress();
         List<AddressDTO> addressDTOS = modelMapper.map(addressList,new TypeToken<List<AddressDTO>>(){}.getType());
@@ -42,7 +41,6 @@ public class AddressController {
     }
 
     @GetMapping("/page")
-//    @PreAuthorize("permitAll()")
     public ResponseEntity<?> listAddressByPaging(@RequestParam(required = false,name = "search") Integer search, Pageable pageable, AddressFilter filter){
         Page<Address> page = addressService.findAllAddressByPage(search,pageable,filter);
         List<AddressDTO> dtos = modelMapper.map(page.getContent(),new TypeToken<List<AddressDTO>>(){}.getType());
@@ -52,7 +50,6 @@ public class AddressController {
     }
 
     @PostMapping("/createAddress")
-    @PreAuthorize("permitAll()")
     public ResponseEntity<?> createAddress(@RequestBody @Valid AddressInsertForm form){
         addressService.createAddress(form);
 
@@ -60,7 +57,6 @@ public class AddressController {
     }
 
     @PutMapping("/updateAddress")
-    @PreAuthorize("permitAll()")
     public ResponseEntity<?> updateAddress(@RequestParam(name = "id") int id,@RequestBody @Valid AddressUpdateForm form){
         addressService.updateAddress(id, form);
 
@@ -68,14 +64,12 @@ public class AddressController {
     }
 
     @DeleteMapping
-    @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteAddress(@RequestParam(name = "id") int id){
         addressService.deleteAddress(id);
         return new ResponseEntity<>("Delete Success!!!",HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteAllAddress")
-    @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteAllAddress(@RequestParam List<Integer> ids){
         addressService.deleteAllAddress(ids);
         return new ResponseEntity<>("Delete All Address Success!!!",HttpStatus.OK);

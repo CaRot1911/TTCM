@@ -18,4 +18,6 @@ public interface IGuestsRepository extends JpaRepository<Guests,Integer>, JpaSpe
     public Guests findGuestsByUserName(String userName);
 
     public Guests getGuestsByUserName(String userName);
+
+    public Guests getGuestsByIdCard(String idCard);
 }

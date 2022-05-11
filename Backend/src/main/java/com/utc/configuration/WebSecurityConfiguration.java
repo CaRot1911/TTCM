@@ -62,8 +62,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-//        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**","/configuration/**", "/swagger-ui.html", "/webjars/**","swagger-ui/**");
-        web.ignoring().antMatchers(HttpMethod.GET,"/UTCDemo/address/***");
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**","/configuration/**", "/swagger-ui.html", "/webjars/**","swagger-ui/**");
 
     }
 
@@ -115,7 +114,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
 
-        http.cors().and().authorizeHttpRequests().antMatchers(HttpMethod.GET,"UTCDemo/hotel/**").hasAuthority("GUESTS")
+        http.cors().and().authorizeHttpRequests().antMatchers(HttpMethod.GET,"UTCDemo/hotel/**").permitAll()
                         .antMatchers(HttpMethod.POST,"UTCDemo/hotel/**").hasAuthority("ADMIN")
                         .antMatchers(HttpMethod.PUT,"UTCDemo/hotel/**").hasAuthority("ADMIN")
                         .and()
@@ -167,17 +166,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(authEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic().and().csrf().disable();
-
-        http.cors().and().authorizeHttpRequests().antMatchers(HttpMethod.GET,"UTCDemo/roomType/**").hasAnyAuthority("GUESTS","ADMIN")
-                .antMatchers(HttpMethod.POST,"UTCDemo/roomType/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.PUT,"UTCDemo/roomType/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"UTCDemo/roomType/**").hasAuthority("ADMIN")
-                .and()
-                .exceptionHandling().authenticationEntryPoint(authEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().httpBasic().and().csrf().disable();
-
-
+        
         http.cors().and().authorizeHttpRequests().antMatchers(HttpMethod.GET,"UTCDemo/starRate/**").hasAnyAuthority("GUESTS","ADMIN")
                 .antMatchers(HttpMethod.POST,"UTCDemo/starRate/**").hasAuthority("GUESTS")
                 .antMatchers(HttpMethod.PUT,"UTCDemo/starRate/**").hasAuthority("GUESTS")
@@ -195,6 +184,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(authEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic().and().csrf().disable();
+
+        http.cors().and().authorizeHttpRequests().antMatchers(HttpMethod.GET,"/UTCDemo/booking/**").hasAnyAuthority("ADMIN","GUESTS")
+                        .antMatchers(HttpMethod.POST,"/UTCDemo/booking/**").hasAuthority("GUESTS")
+                        .antMatchers(HttpMethod.PUT,"/UTCDemo/booking/**").hasAuthority("GUESTS")
+                        .antMatchers(HttpMethod.DELETE,"/UTCDemo/booking/**").hasAuthority("GUESTS")
+                        .and()
+                                .exceptionHandling().authenticationEntryPoint(authEntryPoint)
+                        .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .and().httpBasic().and().csrf().disable();
+
         http.addFilterBefore(createAuthTokenFiler(), UsernamePasswordAuthenticationFilter.class);
 
     }

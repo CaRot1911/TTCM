@@ -89,6 +89,11 @@ public class GuestsService implements IGuestsService{
     }
 
     @Override
+    public Guests getGuestsByIdCard(String idCard) {
+        return null;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Guests guests = guestsRepository.getGuestsByUserName(userName);
         if (guests == null){

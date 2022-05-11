@@ -33,7 +33,6 @@ public class RoomTypeController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> getListRoomType(){
         List<RoomType> list = roomTypeService.getListRoomType();
         List<RoomTypeDTO> dtoList = modelMapper.map(list,new TypeToken<List<RoomTypeDTO>>(){}.getType());
@@ -42,7 +41,6 @@ public class RoomTypeController {
     }
 
     @GetMapping("/page")
-    @PreAuthorize(value = "permitAll()")
     public ResponseEntity<?> getListRoomTypeByPage(String search, RoomTypeFilter filter, Pageable pageable){
         Page<RoomType> page = roomTypeService.getAllByPage(search,filter,pageable);
         List<RoomTypeDTO> roomTypeDTOS = modelMapper.map(page.getContent(),new TypeToken<List<RoomTypeDTO>>(){}.getType());
@@ -52,21 +50,18 @@ public class RoomTypeController {
     }
 
     @PostMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> createRoomType(@RequestBody @Valid RoomTypeCreateForm form){
         roomTypeService.createRoomType(form);
         return new ResponseEntity<>("Create Success!!",HttpStatus.OK);
     }
 
     @PutMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> updateRoomType(@RequestParam(name = "id") int id,@RequestBody @Valid RoomTypeUpdateForm form){
         roomTypeService.updateRoomType(id,form);
         return new ResponseEntity<>("Update Success!!",HttpStatus.OK);
     }
 
     @DeleteMapping
-    @PreAuthorize(value = "ADMIN")
     public ResponseEntity<?> deleteRoomType(@RequestParam(value = "id") int id){
         roomTypeService.deleteRoomType(id);
         return new ResponseEntity<>("Delete Success !!",HttpStatus.OK);

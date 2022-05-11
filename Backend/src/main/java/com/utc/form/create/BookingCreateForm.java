@@ -26,9 +26,5 @@ public class BookingCreateForm {
     @Pattern(regexp = "UNPAID|PAID" ,message = "The Status must be UNPAID or PAID")
     private String status;
 
-    @NotBlank(message = "Can't be left empty")
-    private List<String> hotelServiceNames;
-
-
 
 }
